@@ -8,9 +8,12 @@ class WorkUnitUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     *
+     * @return bool
      */
     public function authorize(): bool
     {
+        // Pastikan hanya pengguna yang berwenang dapat memperbarui data ini.
         return true;
     }
 
@@ -22,18 +25,23 @@ class WorkUnitUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'unit_name' => 'nullable|string|max:255',
             'grade' => 'nullable',
-            'echelon' => 'nullable',
-            'unit_name' => 'nullable'
+            'echelon' => 'nullable|string',
         ];
     }
 
-    public function messages()
+    /**
+     * Get the custom messages for validation errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
     {
         return [
-            'grade.nullable' => 'grade tidak boleh null',
-            'echelon.nullable' => 'echelon tidak boleh null',
-            'unit_name.nullable' => 'unit name tidak boleh null'
+            'unit_name.string' => 'Nama unit harus berupa teks.',
+            'unit_name.max' => 'Nama unit tidak boleh lebih dari 255 karakter.',
+            'echelon.string' => 'Eselon harus berupa teks.',
         ];
     }
 }

@@ -16,5 +16,5 @@ Route::prefix('v1')->group(function () {
     Route::get('employees-search', [EmployeeController::class, 'search'])->middleware('auth:api');
     Route::post('employees/pdf', [EmployeeController::class, 'generatePdf'])->middleware('auth:api');
     Route::apiResource('work-units', WorkUnitController::class)->middleware('auth:api');
-    Route::Get('work-units/all', [WorkUnitController::class, 'getAll'])->middleware('auth:api');
+    Route::get('all', [WorkUnitController::class, 'getAll'])->middleware('auth:api');
 });

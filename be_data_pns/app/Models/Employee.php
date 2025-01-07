@@ -24,6 +24,7 @@ class Employee extends Model
         'religion',
         'phone_number',
         'npwp',
+        'email',
         'photo',
         'work_unit_id'
     ];

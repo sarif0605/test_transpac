@@ -1,15 +1,15 @@
 <template>
-  <div class="min-h-screen bg-base-200 py-20 px-4 sm:px-8 lg:px-12">
-    <div class="max-w-7xl mx-auto">
-      <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-center">
-        Manage Employees
+  <div class="min-h-screen bg-base-300 py-20 px-2 sm:p-8 md:p-12 lg:p-20">
+    <div class="max-w-6xl mx-auto">
+      <h1
+        class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 sm:mb-8"
+      >
+        Employee
       </h1>
-
-      <!-- Action Buttons -->
       <div class="flex flex-col sm:flex-row items-center justify-between mb-6 space-y-4 sm:space-y-0">
         <div class="flex items-center">
           <button class="btn btn-primary" @click="openNewDialog">
-            <i class="pi pi-file-plus"></i> Add Employee
+            <i class="pi pi-file-plus"></i> Add
           </button>
         </div>
 
@@ -27,105 +27,101 @@
           />
         </div>
       </div>
-
-      <!-- Employee List Table -->
-      <div v-if="authStore.isLoading" class="flex justify-center py-6">
-        <Loading />
-      </div>
-      <div v-else>
-        <div class="overflow-x-auto">
+      <div class="overflow-hidden mb-5">
+        <div v-if="authStore.isLoading" class="flex justify-center py-4">
+          <Loading />
+        </div>
+        <div class="overflow-x-auto" v-else>
           <table class="table w-full">
             <thead>
               <tr class="bg-base-content text-white border-b border-gray-300">
-                <th>No</th>
-                <th>NIP</th>
-                <th>Nama</th>
-                <th>Jabatan</th>
-                <th>Tempat Tugas</th>
-                <th>Agama</th>
-                <th>No. Telepon</th>
-                <th>Foto</th>
-                <th>Unit Kerja</th>
-                <th>Grade</th>
-                <th>Echelon</th>
-                <th>Action</th>
+                <th class="px-2 sm:px-4">No</th>
+                <th class="px-2 sm:px-4">NIP</th>
+                <th class="px-2 sm:px-4">Nama</th>
+                <th class="px-2 sm:px-4">Jabatan</th>
+                <th class="px-2 sm:px-4">Tempat Tugas</th>
+                <th class="px-2 sm:px-4">Agama</th>
+                <th class="px-2 sm:px-4">No. Telepon</th>
+                <th class="px-2 sm:px-4">Foto</th>
+                <th class="px-2 sm:px-4">Unit Kerja</th>
+                <th class="px-2 sm:px-4">Grade</th>
+                <th class="px-2 sm:px-4">Echelon</th>
+                <th class="px-2 sm:px-4">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr class="bg-base-100 border-b border-base-200" v-for="(employee, index) in employees" :key="employee.id">
-                <td>{{ index + 1 }}</td>
-                <td>{{ employee.nip }}</td>
-                <td>{{ employee.name }}</td>
-                <td>{{ employee.position }}</td>
-                <td>{{ employee.duty_place }}</td>
-                <td>{{ employee.religion }}</td>
-                <td>{{ employee.phone_number }}</td>
+              <tr
+                class="bg-base-100 border-b border-base-200"
+                v-for="(work_unit, i) in employees"
+              >
+                <td class="px-2 sm:px-4">{{ i + 1 }}</td><td>{{ index + 1 }}</td>
+                <td class="px-2 sm:px-4">{{ employee.nip }}</td>
+                <td class="px-2 sm:px-4">{{ employee.name }}</td>
+                <td class="px-2 sm:px-4">{{ employee.position }}</td>
+                <td class="px-2 sm:px-4">{{ employee.duty_place }}</td>
+                <td class="px-2 sm:px-4">{{ employee.religion }}</td>
+                <td class="px-2 sm:px-4">{{ employee.phone_number }}</td>
                 <td>
                   <img class="w-12 h-12 rounded-full object-cover" :src="employee.photo" alt="photo" />
                 </td>
                 <!-- Menampilkan work_unit -->
-                <td>{{ employee.work_unit.unit_name }}</td>
-                <td>{{ employee.work_unit.grade }}</td>
-                <td>{{ employee.work_unit.echelon }}</td>
-                <td class="space-x-2">
+                <td class="px-2 sm:px-4">{{ employee.work_unit.unit_name }}</td>
+                <td class="px-2 sm:px-4">{{ employee.work_unit.grade }}</td>
+                <td class="px-2 sm:px-4">{{ employee.work_unit.echelon }}</td>
+                <td class="px-2 sm:px-4">
                   <button
-                    class="btn btn-sm btn-secondary"
-                    @click="openEditDialog(employee)"
+                    class="btn btn-secondary btn-sm sm:btn-md mx-1 sm:mx-2"
+                    @click="openEditDialog(work_unit)"
                   >
                     <i class="pi pi-pencil"></i>
                   </button>
                   <button
-                    class="btn btn-sm btn-error"
-                    @click="openDeleteDialog(employee)"
+                    class="btn btn-accent btn-sm sm:btn-md"
+                    @click="openDeleteDialog(work_unit)"
                   >
                     <i class="pi pi-trash"></i>
                   </button>
                 </td>
               </tr>
-              <tr v-if="employees.length === 0">
-                <td colspan="12" class="text-center">Tidak ada data karyawan</td>
-              </tr>
             </tbody>
           </table>
         </div>
       </div>
-
-      <!-- Pagination Controls -->
-      <div class="flex justify-center space-x-4 mt-6">
+      <div class="flex justify-center mb-5 space-x-2">
         <button
           class="btn btn-sm sm:btn-md"
           @click="previousPage"
           :disabled="!pagination.prev_page_url"
         >
-          « Previous
+          «
         </button>
-        <button class="btn btn-sm sm:btn-md">{{ currentPage }}</button>
+        <button class="btn btn-sm sm:btn-md">
+          {{ currentPage }}
+        </button>
         <button
           class="btn btn-sm sm:btn-md"
           @click="nextPage"
           :disabled="!pagination.next_page_url"
         >
-          Next »
+          »
         </button>
       </div>
     </div>
-
-    <!-- Add/Edit Employee Dialog -->
-    <EmployeeDialog
-      :visible="showModal"
-      :data="selectedEmployee"
-      @closeModal="closeModal"
-      @save="getAll"
-    />
-
-    <!-- Delete Confirmation Dialog -->
-    <DeleteDialog
-      :visible="deleteDialogVisible"
-      :itemName="selectedEmployee?.name"
-      @update:visible="deleteDialogVisible = $event"
-      @confirmDelete="deleteEmployee"
-    />
   </div>
+  <EmployeeDialog
+    @closeModal="closeModal"
+    @update:visible="showModal = $event"
+    :data="selected"
+    @save="getAll"
+    :visible="showModal"
+  />
+
+  <DeleteDialog
+    :visible="deleteDialogVisible"
+    :itemName="searchEmployees?.name"
+    @update:visible="deleteDialogVisible = $event"
+    @confirmDelete="deleteEmployee"
+  />
 </template>
 
 <script setup>

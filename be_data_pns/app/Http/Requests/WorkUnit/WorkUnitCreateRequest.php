@@ -8,9 +8,12 @@ class WorkUnitCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     *
+     * @return bool
      */
     public function authorize(): bool
     {
+        // Pastikan hanya pengguna yang berwenang yang dapat membuat permintaan ini.
         return true;
     }
 
@@ -22,18 +25,26 @@ class WorkUnitCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'unit_name' => 'required',
+            'unit_name' => 'required|string|max:255',
             'grade' => 'required',
-            'echelon' => 'required'
+            'echelon' => 'required|string',
         ];
     }
 
-    public function messages()
+    /**
+     * Get the custom messages for validation errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
     {
         return [
-            'grade.required' => 'grade harus di isi',
-            'echelon.required' => 'echelon harus diisi',
-            'unit_name.required' => 'unit name harus diisi'
+            'unit_name.required' => 'Nama unit harus diisi.',
+            'unit_name.string' => 'Nama unit harus berupa teks.',
+            'unit_name.max' => 'Nama unit tidak boleh lebih dari 255 karakter.',
+            'grade.required' => 'Grade harus diisi.',
+            'echelon.required' => 'Eselon harus diisi.',
+            'echelon.string' => 'Eselon harus berupa teks.',
         ];
     }
 }

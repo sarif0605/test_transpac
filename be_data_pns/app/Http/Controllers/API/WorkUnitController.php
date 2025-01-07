@@ -24,7 +24,10 @@ class WorkUnitController extends Controller
 
     public function getAll(){
         $data = WorkUnits::all();
-        return (new WorkUnitResourceCollection($data))->response()->setStatusCode(200);
+        return response()->json([
+           "status" => "success",
+           "data" => $data
+        ]);
     }
 
     /**

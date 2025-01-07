@@ -45,10 +45,9 @@ class EmployeeController extends Controller
     {
         try {
             $data = $request->validated();
-            if ($request->hasFile('photo')) {
-                $photoPath = $request->file('photo')->store('employee');
-                $data['photo'] = Storage::url($photoPath);
-            }
+            $filePath = $request->file('photo')->store('employee');
+            $imageUrl = url('storage/employee/' . basename($filePath));
+            $data['photo'] = $imageUrl;
             $employee = Employee::create($data);
             $data['employee_nip'] = $employee->nip;
             Profile::create($data);
@@ -74,11 +73,11 @@ class EmployeeController extends Controller
             $data = $request->validated();
             if ($request->hasFile('photo')) {
                 if ($employee->photo) {
-                    $oldPhotoPath = str_replace('/storage/', '', $employee->photo);
-                    Storage::delete($oldPhotoPath);
+                    $oldFilePath = str_replace(url('storage') . '/', 'public/', $employee->photo);
+                    Storage::delete($oldFilePath);
                 }
-                $photoPath = $request->file('photo')->store('employee');
-                $data['photo'] = Storage::url($photoPath);
+                $filePath = $request->file('photo')->store('public/employee');
+                $employee->photo = url(Storage::url($filePath));
             }
             $employee->update($data);
             Profile::updateOrCreate(
@@ -120,17 +119,9 @@ class EmployeeController extends Controller
                 'message' => 'Employee dengan ID ' . $nip . ' tidak ditemukan',
             ], 404);
         }
-        if ($employee->foto) {
-            try {
-                $filePath = str_replace(url('storage/'), '', $employee->foto);
-                if (Storage::exists($filePath)) {
-                    Storage::delete($filePath);
-                }
-            } catch (\Exception $e) {
-                return response()->json([
-                    'message' => 'Terjadi kesalahan saat menghapus foto: ' . $e->getMessage(),
-                ], 500);
-            }
+        if ($employee->photo) {
+            $filePath = str_replace(url('storage'), 'public', $employee->photo);
+            Storage::delete($filePath);
         }
         $employee->delete();
         return response()->json([

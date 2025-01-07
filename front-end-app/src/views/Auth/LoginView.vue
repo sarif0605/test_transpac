@@ -63,38 +63,29 @@
         </div>
 
         <!-- Password Field -->
-        <div class="form-control">
+        <div class="form-control relative">
           <label class="label">
             <span class="label-text">Password</span>
           </label>
           <input
-            type="password"
+            :type="showPassword ? 'text' : 'password'"
             placeholder="Enter your password"
             v-model="userInput.password"
-            class="input input-bordered"
+            class="input input-bordered pr-28"
             required
           />
+          <button
+            type="button"
+            class="absolute inset-y-0 right-3 flex items-center text-sm font-medium text-gray-500 focus:outline-none"
+            @click="togglePassword"
+          >
+            {{ showPassword ? 'Tutup' : 'Lihat' }}
+          </button>
         </div>
 
         <!-- Submit Button -->
         <div class="form-control mt-4">
           <button class="btn btn-primary w-full">Login</button>
-        </div>
-
-        <!-- Google Auth Button -->
-        <div class="form-control mt-4">
-          <button
-            @click="authStore.loginWithGoogle"
-            type="button"
-            class="btn btn-outline w-full flex items-center justify-center"
-          >
-            <img
-              src="https://developers.google.com/identity/images/g-logo.png"
-              alt="Google Logo"
-              class="w-5 h-5 mr-2"
-            />
-            Login with Google
-          </button>
         </div>
       </form>
     </div>
@@ -104,7 +95,7 @@
 <script setup>
 import Loading from "@/components/Loading.vue";
 import { useAuthStore } from "@/stores/AuthStore";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 
 // Reactive States
 const authStore = useAuthStore();
@@ -112,6 +103,12 @@ const userInput = reactive({
   email: "",
   password: "",
 });
+const showPassword = ref(false);
+
+// Toggle Password Visibility
+const togglePassword = () => {
+  showPassword.value = !showPassword.value;
+};
 
 // Handle Login
 const handleLogin = () => {
